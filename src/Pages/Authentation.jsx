@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
 import { Logo } from "../assets";
 import { Footer } from "../Containers";
-import { AuthButton } from "../Components";
+import { AuthButton, MainSpinner } from "../Components";
 import UseUser from "../Hooks/UseUser";
 import { FaGoogle, FaGithub } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 const Authentation = () => {
   const { data, isLoading, isError } = UseUser();
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (!isLoading && data) {
       navigate("/", {
-        replace: true,
+        replace: true
       });
     }
   }, [isLoading, data]);
+  
+  if(isLoading){
+    return <MainSpinner></MainSpinner>
+  }
   return (
     <div className="auth-section">
       <img src={Logo} className=" w-12  h-auto object-contain" alt=""></img>

@@ -1,39 +1,39 @@
 import {
   GoogleAuthProvider,
   GithubAuthProvider,
-  signInWithRedirect,
+  signInWithPopup,
 } from "firebase/auth";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa6";
 
 import { auth } from "../Config/firebase.config";
+import { useNavigate } from "react-router-dom";
 const AuthButton = ({ Icon, label, provider }) => {
   
   const googleAuthProvider = new GoogleAuthProvider();
   const gitHubAuthProvider = new GithubAuthProvider();
-
+  const navigate=useNavigate();
   const handleClick = async () => {
     switch (provider) {
       case "GoogleAuthProvider":
-        await signInWithRedirect(auth, googleAuthProvider)
+        await signInWithPopup(auth, googleAuthProvider)
           .then((result) => {
-            console.log(result);
+            if(result) navigate('/');
           })
           .catch((e) => console.log(e.message));
         break;
-
       case "GithubAuthProvider":
-        await signInWithRedirect(auth, gitHubAuthProvider)
+        await signInWithPopup(auth, gitHubAuthProvider)
           .then((result) => {
-            console.log(result);
+            if(result) navigate('/');
           })
           .catch((e) => console.log(e.message));
         break;
 
       default:
-        await signInWithRedirect(auth, googleAuthProvider)
+        await signInWithPopup(auth, googleAuthProvider)
           .then((result) => {
-            console.log(result);
+            if(result) navigate('/');
           })
           .catch((e) => console.log(e.message));
         break;
