@@ -8,7 +8,7 @@ const HomeContainer = () => {
     data: templates,
     isError: templateError,
     isLoading: templateLoading,
-    refetch: Templaterefeatch,
+    
   } = UseTemplate();
   if (templateLoading) {
     return <MainSpinner></MainSpinner>;

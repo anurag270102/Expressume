@@ -46,7 +46,7 @@ const Header = () => {
   return (
     <header className="w-full flex items-center justify-between px-4 py-3 lg:px-8 border-b border-gray-300 bg-bgPrimary z-50 sticky gap-10 top-0">
       {/* logo */}
-      <Link>
+      <Link to={'/'}>
         <img src={Logo} alt="Logo" className="w-8 h-auto object-contain" />
       </Link>
       {/* input */}
@@ -137,7 +137,7 @@ const Header = () => {
                         >
                           My Account
                         </Link>
-                        {AdminIds.includes(data?.uid) && (
+                        {AdminIds?.includes(data?.uid) && (
                           <Link
                             className="text-textLight hover:text-txtDark text-base whitespace-nowrap"
                             to={"/template/create"}
