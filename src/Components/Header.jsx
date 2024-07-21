@@ -10,7 +10,10 @@ import { FadeinOutWithOpecity, slideupMenu } from "../Animations";
 import { auth } from "../Config/firebase.config";
 import { useQueryClient } from "react-query";
 import { AdminIds } from "../Utils/Helper";
+import UseFilters from "../Hooks/UseFilters";
+
 const Header = () => {
+  const { data: FilterData, isLoading: isFilterLoading } = UseFilters();
   const { data, isLoading } = UseUser();
   const [isMenu, setIsMenu] = useState(false);
 
@@ -21,19 +24,52 @@ const Header = () => {
       queryClient.setQueryData("user", null);
     });
   };
+
+  const handleSearchTerm = (e) => {
+    queryClient.setQueryData("globalFilter", {
+      ...queryClient.getQueryData("globalFilter"),
+      searchTerm: e.target.value,
+    });
+  };
+
+  const clearFilter = () => {
+    queryClient.setQueryData("globalFilter", {
+      ...queryClient.getQueryData("globalFilter"),
+      searchTerm: "",
+    });
+  };
+
+  if (isFilterLoading) {
+    return <PuffLoader color="#498fcd" size={40}></PuffLoader>;
+  }
+
   return (
-    <header className=" w-full flex items-center justify-between px-4 py-3 lg:px-8 border-b  border-gray-300 bg-bgPrimary z-50 sticky  gap-10 top-0">
+    <header className="w-full flex items-center justify-between px-4 py-3 lg:px-8 border-b border-gray-300 bg-bgPrimary z-50 sticky gap-10 top-0">
       {/* logo */}
       <Link>
-        <img src={Logo} alt="" className=" w-8 h-auto object-contain " />
+        <img src={Logo} alt="Logo" className="w-8 h-auto object-contain" />
       </Link>
       {/* input */}
       <div className="flex-1 border border-gray-300 px-4 py-1 rounded-md flex items-center justify-between bg-gray-200">
         <input
           type="text"
+          value={FilterData?.searchTerm || ""}
+          onChange={handleSearchTerm}
           placeholder="Search here..."
-          className="flex-1 h-10 bg-transparent text-base font-semibold outline-none border-none "
+          className="flex-1 h-10 bg-transparent text-base font-semibold outline-none border-none"
         />
+
+        <AnimatePresence>
+          {FilterData?.searchTerm?.length > 0 && (
+            <motion.div
+              onClick={clearFilter}
+              {...FadeinOutWithOpecity}
+              className="w-8 h-8 items-center justify-center flex bg-gray-300 cursor-pointer rounded-md active:scale-50 duration-150"
+            >
+              <p className="text-2xl text-black">x</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       {/* profile */}
       <AnimatePresence>
@@ -47,12 +83,12 @@ const Header = () => {
                 onClick={() => setIsMenu(!isMenu)}
               >
                 {data?.photoURL ? (
-                  <div className=" w-12 h-12 rounded-md relative flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-md relative flex items-center justify-center">
                     <img
                       src={data?.photoURL}
                       referrerPolicy="no-referrer"
-                      alt=""
-                      className=" object-cover w-full h-full rounded-md  cursor-pointer"
+                      alt="Profile"
+                      className="object-cover w-full h-full rounded-md cursor-pointer"
                     />
                   </div>
                 ) : (
@@ -63,26 +99,26 @@ const Header = () => {
                   </div>
                 )}
 
-                {/* DropDwon menu */}
+                {/* DropDown menu */}
                 <AnimatePresence>
                   {isMenu && (
                     <motion.div
                       {...slideupMenu}
-                      className=" absolute px-4 py-3 rounded-md bg-white right-0 top-14 flex flex-col justify-start items-center w-64  gap-3 pt-12"
+                      className="absolute px-4 py-3 rounded-md bg-white right-0 top-14 flex flex-col justify-start items-center w-64 gap-3 pt-12"
                       onMouseLeave={() => setIsMenu(false)}
                     >
                       {data?.photoURL ? (
-                        <div className=" w-20 h-20 rounded-full relative flex  flex-col items-center justify-center">
+                        <div className="w-20 h-20 rounded-full relative flex flex-col items-center justify-center">
                           <img
                             src={data?.photoURL}
                             referrerPolicy="no-referrer"
-                            alt=""
-                            className=" object-cover w-full h-full rounded-full  cursor-pointer"
+                            alt="Profile"
+                            className="object-cover w-full h-full rounded-full cursor-pointer"
                           />
                         </div>
                       ) : (
                         <div className="w-20 h-20 rounded-md relative flex items-center justify-center bg-blue-700 shadow-md">
-                          <p className="text-3xl text-white cursor-pointer ">
+                          <p className="text-3xl text-white cursor-pointer">
                             {data?.email[0]}
                           </p>
                         </div>
@@ -94,7 +130,7 @@ const Header = () => {
                       )}
 
                       {/* menu options */}
-                      <div className=" w-full flex flex-col pt-6 items-start gap-8 ">
+                      <div className="w-full flex flex-col pt-6 items-start gap-8">
                         <Link
                           className="text-textLight hover:text-txtDark text-base whitespace-nowrap"
                           to={"/profile"}
@@ -111,7 +147,7 @@ const Header = () => {
                         )}
 
                         <div
-                          className=" w-full px-2 py-2 border-t border-gray-300 flex items-center justify-between group cursor-pointer"
+                          className="w-full px-2 py-2 border-t border-gray-300 flex items-center justify-between group cursor-pointer"
                           onClick={Signout}
                         >
                           <p>Sign Out</p>
