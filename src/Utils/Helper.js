@@ -58,6 +58,6 @@ export const FiltersData = [
 ];
 
 export const TemplateData=[
-  {id:`template-${Date.now()}`,name:'Template1',component:Template1},
-  {id:`template-${Date.now()}`,name:'Template2',component:Template2}
+  {id:`template-${Date.now()}`,name:'templates1',component:Template1},
+  {id:`template-${Date.now()}`,name:'templates2',component:Template2}
 ];

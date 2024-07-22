@@ -185,7 +185,7 @@ const TemplateDesignPinDetails = () => {
           {/* edit the template */}
           {user && (
             <Link
-              to={`/resume/${data?.name}?temolateId=${templateID}`}
+              to={`/resume/${data?.name}?templateId=${templateID}`}
               className=" w-full px-4 py-3 rounded-md flex items-center justify-center bg-emerald-500 cursor-pointer "
             >
               <p className=" text-white font-semibold text-lg">

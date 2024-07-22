@@ -9,7 +9,7 @@ const UseUser = () => {
     async () => {
       try {
         const userDetail = await GetUserDetail();
-        console.log(userDetail);
+        // console.log(userDetail);
         return userDetail;
       } catch (error) {
         console.log(error);
