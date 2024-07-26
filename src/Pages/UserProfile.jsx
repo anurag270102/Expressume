@@ -90,7 +90,7 @@ const UserProfile = () => {
           <AnimatePresence>
             {activeTab === "collections" && (
               <>
-                {user?.collections.length > 0 && user?.collections ? (
+                {user?.collections?.length > 0 && user?.collections ? (
                   <>
                     <ReanderTemplate
                       templates={templates?.filter((temp) =>
@@ -119,7 +119,7 @@ const UserProfile = () => {
             )}
              {activeTab === "resumes" && (
               <>
-                {savedResume.length > 0 && savedResume ? (
+                {savedResume?.length > 0 && savedResume ? (
                   <>
                     <ReanderTemplate
                       templates={savedResume}

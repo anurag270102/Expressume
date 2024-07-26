@@ -37,7 +37,7 @@ const Template1 = () => {
   const templateName = pathname?.split("/")?.slice(-1);
   const searchParams = new URLSearchParams(location.search);
   const loadedTemplateId = searchParams.get("templateId");
-  // console.log(pathname, templateName, loadedTemplateId);
+   //console.log(pathname, templateName, loadedTemplateId);
 
   const [isEdit, setIsEdit] = useState(false);
   const { data: user } = useUser();
@@ -355,7 +355,7 @@ const Template1 = () => {
         var pdf = new jsPDF({
           orientation: "p",
           unit: "mm",
-          format: [ a4Hight, a4Width ],
+          format: [a4Hight, a4Width],
         });
 
         const aspectRatio = a4Width / a4Hight;
