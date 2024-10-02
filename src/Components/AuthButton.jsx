@@ -25,6 +25,7 @@ const AuthButton = ({ Icon, label, provider }) => {
       case "GithubAuthProvider":
         await signInWithPopup(auth, gitHubAuthProvider)
           .then((result) => {
+            console.log(result);
             if(result) navigate('/');
           })
           .catch((e) => console.log(e.message));

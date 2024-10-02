@@ -137,7 +137,9 @@ const Template2 = () => {
     setFormData((prevFormData) => {
       const newSection = [
         ...prevFormData[section],
-        section === "experiences" || section === "education" ? {} : "",
+        section === "experiences" || section === "education"
+          ? {}
+          : `add ${section}`,
       ];
       return { ...prevFormData, [section]: newSection };
     });
@@ -173,15 +175,16 @@ const Template2 = () => {
         toast.error(`Error : ${err.message}`);
       });
   };
-  const generatePDF = async () => {
-    // access the dom element using useRef HOOK
 
+  const generatePDF = async (e) => {
+    // access the dom element using useRef HOOK
+    e.preventDefault();
     const element = resumeRef.current;
     if (!element) {
       toast.info("Unable to capture the content at a moment");
       return;
     }
-    console.log(element);
+    console.log(resumeRef);
     htmlToImage
       .toPng(element)
       .then((dataURL) => {
@@ -330,209 +333,270 @@ const Template2 = () => {
               />
             </div>
           </div>
-          <div className=" border border-gray-300 p-[1vw]">
+          <div className=" border border-gray-300 p-[1vw]" ref={resumeRef}>
             {/* Heading */}
-            <div className="mb-2">
-              {formData.name && isEdit ? (
-                <input
-                  className="text-[#0277bd] w-full text-center font-extrabold text-[2em] uppercase font-noto bg-transparent outline-none border-none"
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  value={formData.name}
-                  placeholder="your name"
-                ></input>
-              ) : (
-                <input
-                  className="text-[#0277bd] w-full text-center font-extrabold text-[2em] uppercase font-noto bg-transparent outline-none border-none"
-                  value={formData.name}
-                  onChange={() => toast.info("Click on Edit Button")}
-                  placeholder="your name"
-                ></input>
-              )}
-              <div className="flex justify-center items-center gap-2 w-full">
-                <div className="w-fit">
-                  <DynamicWidthInput
-                    value={formData.location}
-                    onChange={
-                      isEdit
-                        ? (e) =>
-                            setFormData({
-                              ...formData,
-                              location: e.target.value,
-                            })
-                        : () => toast.info("Click on Edit Button")
-                    }
-                    type={"text"}
-                    placeholder="location"
-                  />
-                </div>
-                |
-                <div className="max-w-fit">
-                  <DynamicWidthInput
-                    value={formData.portfolio}
-                    onChange={
-                      isEdit
-                        ? (e) =>
-                            setFormData({
-                              ...formData,
-                              portfolio: e.target.value,
-                            })
-                        : () => toast.info("Click on Edit Button")
-                    }
-                    type={"text"}
-                    placeholder="Portfolio Link"
-                  />
-                  
-                </div>
-                |
-                <div className="w-fit">
-                  <DynamicWidthInput
-                    value={formData.email}
-                    onChange={isEdit?(e) =>
-                      setFormData({ ...formData, email: e.target.value }):() => toast.info("Click on Edit Button")
-                    }
-                    type={"email"}
-                    placeholder="your email"
-                  />
-                </div>
+            <AnimatePresence>
+              <div className="mb-2">
+                <motion.div {...FadeinOutWithOpecity}>
+                  {formData.name && isEdit ? (
+                    <input
+                      className="text-[#0277bd] w-full text-center font-extrabold text-[2em] uppercase font-noto bg-transparent outline-none border-none"
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      spellcheck="false"
+                      value={formData.name}
+                      placeholder="your name"
+                    ></input>
+                  ) : (
+                    <input
+                      className="text-[#0277bd] w-full text-center font-extrabold text-[2em] uppercase font-noto bg-transparent outline-none border-none"
+                      value={formData.name}
+                      onChange={() => toast.info("Click on Edit Button")}
+                      placeholder="your name"
+                      spellcheck="false"
+                    ></input>
+                  )}
+                </motion.div>
+                <motion.div
+                  className="flex justify-center items-center gap-2 w-full"
+                  {...FadeinOutWithOpecity}
+                >
+                  <motion.div className="w-fit" {...FadeinOutWithOpecity}>
+                    <DynamicWidthInput
+                      value={formData.location}
+                      onChange={
+                        isEdit
+                          ? (e) =>
+                              setFormData({
+                                ...formData,
+                                location: e.target.value,
+                              })
+                          : () => toast.info("Click on Edit Button")
+                      }
+                      type={"text"}
+                      placeholder="location"
+                    />
+                  </motion.div>
+                  |
+                  <motion.div className="max-w-fit" {...FadeinOutWithOpecity}>
+                    <DynamicWidthInput
+                      value={formData.portfolio}
+                      onChange={
+                        isEdit
+                          ? (e) =>
+                              setFormData({
+                                ...formData,
+                                portfolio: e.target.value,
+                              })
+                          : () => toast.info("Click on Edit Button")
+                      }
+                      type={"text"}
+                      placeholder="Portfolio Link"
+                    />
+                  </motion.div>
+                  |
+                  <motion.div className="w-fit" {...FadeinOutWithOpecity}>
+                    <DynamicWidthInput
+                      value={formData.email}
+                      onChange={
+                        isEdit
+                          ? (e) =>
+                              setFormData({
+                                ...formData,
+                                email: e.target.value,
+                              })
+                          : () => toast.info("Click on Edit Button")
+                      }
+                      type={"email"}
+                      placeholder="your email"
+                    />
+                  </motion.div>
+                </motion.div>
               </div>
-            </div>
+            </AnimatePresence>
 
             {/* Role and About */}
-            <div className="w-full mt-2 px-4 mb-8">
-              <input
-                type={"text"}
-                placeholder={"Your Role"}
-                value={formData.role}
-                onChange={isEdit ?(e) =>
-                  setFormData({ ...formData, role: e.target.value }):() => toast.info("Click on Edit Button")
-                }
-                className="uppercase text-xl font-bold text-[#0277bd] bg-transparent outline-none border-none "
-              ></input>
-              <textarea
-                className="w-full mt-2 bg-transparent outline-none border-none  text-justify scrollbar-none resize-none text-black"
-                value={formData.about}
-                onChange={isEdit?(e) =>
-                  setFormData({ ...formData, about: e.target.value }):() => toast.info("Click on Edit Button")
-                }
-              ></textarea>
-            </div>
-
-            {/* Work Experience */}
-            <div className="w-full">
-              <div className="w-full mt-6 flex gap-4">
-                <p className="uppercase text-xl font-bold text-[#0277bd]">
-                  Work Experience
-                </p>
+            <AnimatePresence>
+              <div className="w-full mt-2  mb-8">
+                <motion.div {...FadeinOutWithOpecity}>
+                  <input
+                    type={"text"}
+                    placeholder={"Your Role"}
+                    value={formData.role}
+                    onChange={
+                      isEdit
+                        ? (e) =>
+                            setFormData({ ...formData, role: e.target.value })
+                        : () => toast.info("Click on Edit Button")
+                    }
+                    className="uppercase text-xl font-bold text-[#0277bd] bg-transparent outline-none border-none "
+                    spellcheck="false"
+                  ></input>
+                </motion.div>
                 <AnimatePresence>
-                <motion.button 
-                {...FadeinOutWithOpecity}>
-                  {isEdit && (
-                  <button onClick={handleAdd("experiences")} className="ml-2">
-                    <FaPlus className="text-sm text-black"  />
-                  </button>
-                )}
-                </motion.button>
+                  <motion.div {...opacityINOut(1)}>
+                    <textarea
+                      className="w-full mt-2 bg-transparent outline-none border-none  text-justify scrollbar-none resize-none text-black"
+                      value={formData.about}
+                      onChange={
+                        isEdit
+                          ? (e) =>
+                              setFormData({
+                                ...formData,
+                                about: e.target.value,
+                              })
+                          : () => toast.info("Click on Edit Button")
+                      }
+                    ></textarea>
+                  </motion.div>
                 </AnimatePresence>
               </div>
-              <div className="h-[1px] bg-gray-500 w-full my-2"></div>
-              <div className="flex flex-col w-full gap-5 flex-wrap">
-                <ul>
-                  {formData.experiences.map((experience, index) => (
-                    <div key={index}>
-                      <div className="flex font-semibold justify-between">
-                        <div className="flex gap-2">
-                          <DynamicWidthInput
-                            type="text"
-                            placeholder="Title"
-                            value={experience.title || "Title"}
-                            onChange={isEdit?handleChange(
-                              "experiences",
-                              index,
-                              "title"
-                            ):() => toast.info("Click on Edit Button")}
-                          />
-                          |
-                          <DynamicWidthInput
-                            type="text"
-                            placeholder="Company"
-                            value={experience.company || "Company"}
-                            onChange={isEdit?handleChange(
-                              "experiences",
-                              index,
-                              "company"
-                            ):() => toast.info("Click on Edit Button")}
-                          />
-                          |
-                          <DynamicWidthInput
-                            type="text"
-                            placeholder="Duration"
-                            value={experience.duration || "Duration"}
-                            onChange={isEdit?handleChange(
-                              "experiences",
-                              index,
-                              "duration"
-                            ):() => toast.info("Click on Edit Button")}
-                          />{" "}
-                        </div>
-                        {isEdit && (
-                          <button onClick={handleRemove("experiences", index)}>
-                            <FaTrash />
-                          </button>
-                        )}
-                      </div>
-                      <ul
-                        style={{ listStyleType: "disc" }}
-                        className="px-6 mt-2 bg-transparent"
-                      >
-                        {experience.tasks &&
-                          experience.tasks.map((task, taskIndex) => (
-                            <li
-                              key={taskIndex}
-                              className="flex items-center  justify-between "
-                            >
-                              <DynamicWidthInput
-                                type="text"
-                                value={task}
-                                onChange={isEdit?(e) => {
-                                  const newTasks = experience.tasks.slice();
-                                  newTasks[taskIndex] = e.target.value;
-                                  handleChange(
-                                    "experiences",
-                                    index,
-                                    "tasks"
-                                  )({
-                                    target: { value: newTasks },
-                                  });
-                                }:() => toast.info("Click on Edit Button")}
-                              />
-                              {isEdit && (
-                                <button
-                                  onClick={() => {
-                                    const newTasks = experience.tasks.filter(
-                                      (_, i) => i !== taskIndex
-                                    );
-                                    handleChange(
+            </AnimatePresence>
+
+            {/* Work Experience */}
+            <AnimatePresence>
+              <div className="w-full">
+                <div className="w-full mt-6 flex gap-4">
+                  <motion.div {...opacityINOut(1)}>
+                    <p className="uppercase text-xl font-bold text-[#0277bd]">
+                      Work Experience
+                    </p>
+                  </motion.div>
+                  <AnimatePresence>
+                    <motion.button {...FadeinOutWithOpecity}>
+                      {isEdit && (
+                        <button
+                          onClick={handleAdd("experiences")}
+                          className="ml-2"
+                        >
+                          <FaPlus className="text-sm text-black" />
+                        </button>
+                      )}
+                    </motion.button>
+                  </AnimatePresence>
+                </div>
+                <div className="h-[1px] bg-gray-500 w-full my-2"></div>
+                <div className="flex flex-col w-full gap-5 flex-wrap">
+                  <ul>
+                    {formData.experiences.map((experience, index) => (
+                      <div key={index}>
+                        <motion.div
+                          className="flex font-semibold justify-between items-center"
+                          {...FadeinOutWithOpecity}
+                        >
+                          <div className="flex gap-2 ">
+                            <DynamicWidthInput
+                              type="text"
+                              placeholder="Title"
+                              value={experience.title || "Title"}
+                              onChange={
+                                isEdit
+                                  ? handleChange("experiences", index, "title")
+                                  : () => toast.info("Click on Edit Button")
+                              }
+                            />
+                            |
+                            <DynamicWidthInput
+                              type="text"
+                              placeholder="Company"
+                              value={experience.company || "Company"}
+                              onChange={
+                                isEdit
+                                  ? handleChange(
                                       "experiences",
                                       index,
-                                      "tasks"
-                                    )({
-                                      target: { value: newTasks },
-                                    });
-                                  }}
-                                >
-                                  <FaTrash />
-                                </button>
-                              )}
-                            </li>
-                          ))}
-                        <li>
+                                      "company"
+                                    )
+                                  : () => toast.info("Click on Edit Button")
+                              }
+                            />
+                            |
+                            <DynamicWidthInput
+                              type="text"
+                              placeholder="Duration"
+                              value={experience.duration || "Duration"}
+                              onChange={
+                                isEdit
+                                  ? handleChange(
+                                      "experiences",
+                                      index,
+                                      "duration"
+                                    )
+                                  : () => toast.info("Click on Edit Button")
+                              }
+                            />{" "}
+                          </div>
+                          <motion.div {...FadeinOutWithOpecity}>
+                            {isEdit && (
+                              <button
+                                onClick={handleRemove("experiences", index)}
+                              >
+                                <FaTrash />
+                              </button>
+                            )}
+                          </motion.div>
+                        </motion.div>
+                        <ul
+                          style={{ listStyleType: "disc" }}
+                          className="px-6 mt-2 bg-transparent"
+                        >
+                          {experience.tasks &&
+                            experience.tasks.map((task, taskIndex) => (
+                              <motion.div
+                                className="flex items-end justify-between"
+                                {...opacityINOut(taskIndex)}
+                              >
+                                <li key={taskIndex} className=" list-item ">
+                                  <DynamicWidthInput
+                                    type="text"
+                                    value={task}
+                                    onChange={
+                                      isEdit
+                                        ? (e) => {
+                                            const newTasks =
+                                              experience.tasks.slice();
+                                            newTasks[taskIndex] =
+                                              e.target.value;
+                                            handleChange(
+                                              "experiences",
+                                              index,
+                                              "tasks"
+                                            )({
+                                              target: { value: newTasks },
+                                            });
+                                          }
+                                        : () =>
+                                            toast.info("Click on Edit Button")
+                                    }
+                                  />
+                                </li>
+                                {isEdit && (
+                                  <button
+                                    onClick={() => {
+                                      const newTasks = experience.tasks.filter(
+                                        (_, i) => i !== taskIndex
+                                      );
+                                      handleChange(
+                                        "experiences",
+                                        index,
+                                        "tasks"
+                                      )({
+                                        target: { value: newTasks },
+                                      });
+                                    }}
+                                  >
+                                    <FaTrash />
+                                  </button>
+                                )}
+                              </motion.div>
+                            ))}
+
                           {isEdit && (
                             <button
                               onClick={() => {
                                 const newTasks = experience.tasks
-                                  ? [...experience.tasks, "add new task"]
+                                  ? [...experience.tasks, "Add Task"]
                                   : ["add new task"];
                                 handleChange(
                                   "experiences",
@@ -546,121 +610,197 @@ const Template2 = () => {
                               <FaPlus />
                             </button>
                           )}
-                        </li>
-                      </ul>
-                    </div>
-                  ))}
-                </ul>
+                        </ul>
+                      </div>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
+            </AnimatePresence>
 
             {/* Skills */}
-            <div className="w-full">
-              <div className="w-full mt-6 flex gap-2">
-                <p className="uppercase text-xl font-bold text-[#0277bd]">
-                  Skills
-                </p>
-                {isEdit && (
-                  <button onClick={handleAdd("skills")} className="ml-2">
-                    <FaPlus />
-                  </button>
-                )}
+            <AnimatePresence>
+              <div className="w-full">
+                <div className="w-full mt-6 flex gap-2">
+                  <p className="uppercase text-xl font-bold text-[#0277bd]">
+                    Skills
+                  </p>
+                  <motion.div {...FadeinOutWithOpecity}>
+                    {isEdit && (
+                      <button onClick={handleAdd("skills")} className="">
+                        <FaPlus />
+                      </button>
+                    )}
+                  </motion.div>
+                </div>
+                <div className="h-[1px] bg-gray-500 w-full my-2"></div>
+                <div className="flex flex-wrap px-6 justify-start w-full gap-10">
+                  <ul className="flex gap-2 flex-col">
+                    {formData.skills.map((skill, index) => (
+                      <motion.div
+                        className="flex gap-2"
+                        {...opacityINOut(index)}
+                      >
+                        <li style={{ listStyleType: "disc" }} key={index}>
+                          <DynamicWidthInput
+                            type="text"
+                            value={skill}
+                            onChange={
+                              isEdit
+                                ? handleChange("skills", index)
+                                : () => toast.info("Click on Edit Button")
+                            }
+                            placeholder={"add skill"}
+                          />
+                        </li>
+                        <motion.div {...FadeinOutWithOpecity}>
+                          {isEdit && (
+                            <button onClick={handleRemove("skills", index)}>
+                              <FaTrash />
+                            </button>
+                          )}
+                        </motion.div>
+                      </motion.div>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <div className="h-[1px] bg-gray-500 w-full my-2"></div>
-              <div className="flex flex-wrap pl-10 justify-start w-full gap-10">
-                <ul className="flex gap-2 flex-col">
-                  {formData.skills.map((skill, index) => (
-                    <li
-                      style={{ listStyleType: "disc" }}
-                      key={index}
-                      className="flex gap-2"
-                    >
-                      <DynamicWidthInput
-                        type="text"
-                        value={skill}
-                        onChange={isEdit?handleChange("skills", index):() => toast.info("Click on Edit Button")}
-                        placeholder={"add skill"}
-                      />
-                      {isEdit && (
-                        <button onClick={handleRemove("skills", index)}>
-                          <FaTrash />
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            </AnimatePresence>
 
             {/* Education */}
-            <div className="w-full">
-              <div className="w-full mt-6 flex gap-2">
-                <p className="uppercase text-xl font-bold text-[#0277bd]">
-                  Education
-                </p>
-                {isEdit && (
-                  <button onClick={handleAdd("education")} className="ml-2">
-                    <FaPlus />
-                  </button>
-                )}
-              </div>
-              <div className="h-[1px] bg-gray-500 w-full my-2"></div>
-              <div className="flex flex-col w-full gap-5 ">
-                {formData.education.map((edu, index) => (
-                  <div key={index}>
-                    <div className="flex font-semibold justify-between">
-                      <div className="flex gap-2">
-                        <DynamicWidthInput
-                          type="text"
-                          className="w-full bg-transparent"
-                          placeholder="Degree"
-                          value={edu.degree || "Add Degree"}
-                          onChange={isEdit?handleChange("education", index, "degree"):() => toast.info("Click on Edit Button")}
-                        />
-                        |
-                        <DynamicWidthInput
-                          type="text"
-                          className="w-full"
-                          placeholder="Institution"
-                          value={edu.institution || "Add Institution"}
-                          onChange={isEdit?handleChange(
-                            "education",
-                            index,
-                            "institution"
-                          ):() => toast.info("Click on Edit Button")}
-                        />
-                        |
-                        <DynamicWidthInput
-                          type="text"
-                          className={`w-full ${
-                            !isEdit && " flex justify-end items-end"
-                          }`}
-                          placeholder={`Duration`}
-                          value={edu.duration || "Add Duration"}
-                          onChange={isEdit?handleChange(
-                            "education",
-                            index,
-                            "duration"
-                          ):() => toast.info("Click on Edit Button")}
-                        />
+            <AnimatePresence>
+              <div className="w-full">
+                <div className="w-full mt-6 flex gap-2">
+                  <p className="uppercase text-xl font-bold text-[#0277bd]">
+                    Education
+                  </p>
+                  <motion.div {...FadeinOutWithOpecity}>
+                    {isEdit && (
+                      <button onClick={handleAdd("education")} className="ml-2">
+                        <FaPlus />
+                      </button>
+                    )}
+                  </motion.div>
+                </div>
+                <div className="h-[1px] bg-gray-500 w-full my-2"></div>
+                <div className="flex flex-col w-full gap-5 ">
+                  {formData.education.map((edu, index) => (
+                    <div key={index}>
+                      <div className="flex font-semibold justify-between">
+                        <div className="flex gap-2">
+                          <DynamicWidthInput
+                            type="text"
+                            className="w-full bg-transparent"
+                            placeholder="Degree"
+                            value={edu.degree || "Add Degree"}
+                            onChange={
+                              isEdit
+                                ? handleChange("education", index, "degree")
+                                : () => toast.info("Click on Edit Button")
+                            }
+                          />
+                          |
+                          <DynamicWidthInput
+                            type="text"
+                            className="w-full"
+                            placeholder="Institution"
+                            value={edu.institution || "Add Institution"}
+                            onChange={
+                              isEdit
+                                ? handleChange(
+                                    "education",
+                                    index,
+                                    "institution"
+                                  )
+                                : () => toast.info("Click on Edit Button")
+                            }
+                          />
+                          |
+                          <DynamicWidthInput
+                            type="text"
+                            className={`w-full ${
+                              !isEdit && " flex justify-end items-end"
+                            }`}
+                            placeholder={`Duration`}
+                            value={edu.duration || "Add Duration"}
+                            onChange={
+                              isEdit
+                                ? handleChange("education", index, "duration")
+                                : () => toast.info("Click on Edit Button")
+                            }
+                          />
+                        </div>
+                        <motion.div {...FadeinOutWithOpecity}>
+                          {isEdit && (
+                            <button onClick={handleRemove("education", index)}>
+                              <FaTrash />
+                            </button>
+                          )}
+                        </motion.div>
                       </div>
-                      {isEdit && (
-                        <button onClick={handleRemove("education", index)}>
-                          <FaTrash />
-                        </button>
-                      )}
-                    </div>
-                    <ul style={{ listStyleType: "disc" }} className="px-6 mt-2">
-                      {edu.details &&
-                        edu.details.map((detail, detailIndex) => (
-                          <li key={detailIndex}>
-                            <DynamicWidthInput
-                              type="text"
-                              className="w-full bg-transparent"
-                              value={detail}
-                              onChange={isEdit?(e) => {
-                                const newDetails = edu.details.slice();
-                                newDetails[detailIndex] = e.target.value;
+                      <ul
+                        style={{ listStyleType: "disc" }}
+                        className="px-6 mt-2 "
+                      >
+                        {edu.details &&
+                          edu.details.map((detail, detailIndex) => (
+                            <motion.div
+                              className="flex items-end justify-between"
+                              {...opacityINOut(detailIndex)}
+                            >
+                              <li key={detailIndex}>
+                                <DynamicWidthInput
+                                  type="text"
+                                  className="w-full bg-transparent"
+                                  value={detail}
+                                  onChange={
+                                    isEdit
+                                      ? (e) => {
+                                          const newDetails =
+                                            edu.details.slice();
+                                          newDetails[detailIndex] =
+                                            e.target.value;
+                                          handleChange(
+                                            "education",
+                                            index,
+                                            "details"
+                                          )({
+                                            target: { value: newDetails },
+                                          });
+                                        }
+                                      : () => toast.info("Click on Edit Button")
+                                  }
+                                />
+                              </li>
+                              <motion.div {...FadeinOutWithOpecity}>
+                                {isEdit && (
+                                  <button
+                                    onClick={() => {
+                                      const newTasks = edu.details.filter(
+                                        (_, i) => i !== detailIndex
+                                      );
+                                      handleChange(
+                                        "education",
+                                        index,
+                                        "details"
+                                      )({
+                                        target: { value: newTasks },
+                                      });
+                                    }}
+                                  >
+                                    <FaTrash />
+                                  </button>
+                                )}
+                              </motion.div>
+                            </motion.div>
+                          ))}
+                        <motion.div {...FadeinOutWithOpecity}>
+                          {isEdit && (
+                            <button
+                              onClick={() => {
+                                const newDetails = edu.details
+                                  ? [...edu.details, "Add Detail"]
+                                  : ["Add Detail"];
                                 handleChange(
                                   "education",
                                   index,
@@ -668,109 +808,123 @@ const Template2 = () => {
                                 )({
                                   target: { value: newDetails },
                                 });
-                              }:() => toast.info("Click on Edit Button")}
-                            />
-                          </li>
-                        ))}
-                      <li>
-                        {isEdit && (
-                          <button
-                            onClick={() => {
-                              const newDetails = edu.details
-                                ? [...edu.details, "Add Detail"]
-                                : ["Add Detail"];
-                              handleChange(
-                                "education",
-                                index,
-                                "details"
-                              )({
-                                target: { value: newDetails },
-                              });
-                            }}
-                          >
-                            <FaPlus />
-                          </button>
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-                ))}
+                              }}
+                            >
+                              <FaPlus />
+                            </button>
+                          )}
+                        </motion.div>
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            </AnimatePresence>
 
             {/* Interests */}
-            <div className="w-full">
-              <div className="w-full mt-6 flex gap-2">
-                <p className="uppercase text-xl font-bold text-[#0277bd]">
-                  Interests
-                </p>
-                {isEdit && (
-                  <button onClick={handleAdd("interests")} className="ml-2">
-                    <FaPlus />
-                  </button>
-                )}
+            <AnimatePresence>
+              <div className="w-full">
+                <div className="w-full mt-6 flex gap-2">
+                  <p className="uppercase text-xl font-bold text-[#0277bd]">
+                    Interests
+                  </p>
+                  <motion.div {...FadeinOutWithOpecity}>
+                    {isEdit && (
+                      <button onClick={handleAdd("interests")} className="ml-2">
+                        <FaPlus />
+                      </button>
+                    )}
+                  </motion.div>
+                </div>
+                <div className="h-[1px] bg-gray-500 w-full my-2"></div>
+                <div className="flex  flex-wrap px-6 justify-start w-full gap-10">
+                  <ul
+                    style={{ listStyleType: "disc" }}
+                    className="flex flex-col gap-1"
+                  >
+                    {formData.interests.map((interest, index) => (
+                      <motion.div
+                        className="flex gap-2"
+                        {...opacityINOut(index)}
+                      >
+                        <li
+                          key={index}
+                          className=" items-center gap-2 list-item"
+                        >
+                          <DynamicWidthInput
+                            type="text"
+                            className="w-full bg-transparent"
+                            value={interest}
+                            onChange={
+                              isEdit
+                                ? handleChange("interests", index)
+                                : () => toast.info("Click on Edit Button")
+                            }
+                          />
+                        </li>
+                        {isEdit && (
+                          <motion.div {...FadeinOutWithOpecity}>
+                            <button onClick={handleRemove("interests", index)}>
+                              <FaTrash />
+                            </button>
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <div className="h-[1px] bg-gray-500 w-full my-2"></div>
-              <div className="flex flex-wrap px-10 justify-start w-full gap-10">
-                <ul
-                  style={{ listStyleType: "disc" }}
-                  className=" flex flex-col gap-1"
-                >
-                  {formData.interests.map((interest, index) => (
-                    <li key={index} className="flex gap-2">
-                      <DynamicWidthInput
-                        type="text"
-                        className="w-full bg-transparent"
-                        value={interest}
-                        onChange={isEdit?handleChange("interests", index):() => toast.info("Click on Edit Button")}
-                      />
-                      {isEdit && (
-                        <button onClick={handleRemove("interests", index)}>
-                          <FaTrash />
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            </AnimatePresence>
 
             {/* Awards */}
-            <div className="w-full">
-              <div className="w-full mt-6 flex gap-2">
-                <p className="uppercase text-xl font-bold text-[#0277bd]">
-                  Awards
-                </p>
-                {isEdit && (
-                  <button onClick={handleAdd("awards")} className="ml-2">
-                    <FaPlus />
-                  </button>
-                )}
-              </div>
-              <div className="h-[1px] bg-gray-500 w-full my-2"></div>
-              <div className="flex flex-wrap pl-10 justify-start w-full">
-                <ul
-                  style={{ listStyleType: "disc" }}
-                  className="flex flex-col gap-2"
-                >
-                  {formData.awards.map((award, index) => (
-                    <li key={index} className="flex gap-2">
-                      <DynamicWidthInput
-                        type="text"
-                        className="w-full bg-transparent"
-                        value={award}
-                        onChange={isEdit?handleChange("awards", index):() => toast.info("Click on Edit Button")}
-                      />
-                      {isEdit && (
-                        <button onClick={handleRemove("awards", index)}>
-                          <FaTrash />
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <AnimatePresence>
+              <motion.div className="w-full" {...FadeinOutWithOpecity}>
+                <div className="w-full mt-6 flex gap-2">
+                  <p className="uppercase text-xl font-bold text-[#0277bd]">
+                    Awards
+                  </p>
+                  {isEdit && (
+                    <motion.div {...FadeinOutWithOpecity}>
+                      <button onClick={handleAdd("awards")} className="ml-2">
+                        <FaPlus />
+                      </button>
+                    </motion.div>
+                  )}
+                </div>
+                <div className="h-[1px] bg-gray-500 w-full my-2"></div>
+                <div className="flex flex-wrap pl-6 justify-start w-full">
+                  <ul
+                    style={{ listStyleType: "disc" }}
+                    className="flex flex-col gap-2"
+                  >
+                    {formData.awards.map((award, index) => (
+                      <li key={index} className=" gap-2 list-item">
+                        <motion.div
+                          className="flex items-center gap-2"
+                          {...opacityINOut(index)}
+                        >
+                          <DynamicWidthInput
+                            type="text"
+                            className="w-full bg-transparent"
+                            value={award}
+                            onChange={
+                              isEdit
+                                ? handleChange("awards", index)
+                                : () => toast.info("Click on Edit Button")
+                            }
+                          />
+                          {isEdit && (
+                            <button onClick={handleRemove("awards", index)}>
+                              <FaTrash />
+                            </button>
+                          )}
+                        </motion.div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -800,6 +954,7 @@ const DynamicWidthInput = ({ value, onChange, placeholder, type }) => {
         placeholder={placeholder}
         style={{ width: inputWidth }}
         type={type}
+        spellcheck="false"
       />
       <span
         ref={spanRef}
