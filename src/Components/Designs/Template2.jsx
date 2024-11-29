@@ -273,7 +273,7 @@ const Template2 = () => {
     );
   }
   return (
-    <div className="w-full flex flex-col items-center justify-start gap-4">
+    <div className="w-full flex flex-col items-center justify-start gap-4 ">
       <div className="w-full flex items-center gap-2 px-4">
         <Link
           to={"/"}
@@ -333,7 +333,7 @@ const Template2 = () => {
               />
             </div>
           </div>
-          <div className=" border border-gray-300 p-[1vw]" ref={resumeRef}>
+          <div className=" border border-gray-300 p-[1vw] bg-white" ref={resumeRef}>
             {/* Heading */}
             <AnimatePresence>
               <div className="mb-2">

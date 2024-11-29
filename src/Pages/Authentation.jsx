@@ -30,7 +30,7 @@ const Authentation = () => {
         <p className=" text-base  text-gray-600 ">
           express way to create resume
         </p>
-        <h2 className="text-2xl text-gray-600">Authtation</h2>
+        <h2 className="text-2xl text-gray-600">Authentication</h2>
         <div className=" w-full lg:w-96 rounded-md   p-2 flex flex-col justify-start gap-6 ">
           <AuthButton
             Icon={FaGoogle}

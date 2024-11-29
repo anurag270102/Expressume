@@ -41,6 +41,7 @@ export const GetUserDetail = () => {
   });
 };
 
+//get templatedetails
 export const getTemplates = () => {
   return new Promise((resolve, reject) => {
     const templateQuery = query(
@@ -56,6 +57,7 @@ export const getTemplates = () => {
   });
 };
 
+//saveTocollection
 export const saveTocollection = async (user, data) => {
   if (!user?.collections?.includes(data?._id)) {
     const docRef = doc(db, "users", user?.uid);
@@ -76,6 +78,7 @@ export const saveTocollection = async (user, data) => {
   }
 };
 
+//favourites
 export const saveToFavourites = async (user, data) => {
   console.log(data);
   if (!data?.favourites?.includes(user?.uid)) {
@@ -97,6 +100,7 @@ export const saveToFavourites = async (user, data) => {
   }
 };
 
+//templatedetails
 export const getTemplateDeatails = async (templateID) => {
   return new Promise((resolve,reject)=>{
     const unsubscribe=onSnapshot(doc(db,'templates',templateID),(doc)=>{
@@ -107,6 +111,7 @@ export const getTemplateDeatails = async (templateID) => {
   })
 };
 
+//get template deatils edit by user
 export const getTemplateDetailEditByUser = (uid, id) => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onSnapshot(
@@ -120,6 +125,7 @@ export const getTemplateDetailEditByUser = (uid, id) => {
   });
 };
 
+//saved resume
 export const getSavedResumes=(uid)=>{
   return new Promise((resolve, reject) => {
     const templateQuery = query(
