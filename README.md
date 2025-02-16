@@ -9,7 +9,6 @@ Expressume is a web-based resume builder designed to simplify resume creation fo
 - 💻 [Tech Stack](#tech-stack)
 - 🎥 [Demo](#demo)
 - 🛠️ [Installation](#installation)
-- 🚀 [Where to Use This Project](#Where to Use This Project)
 - 🤝 [Contributing](#contributing)
 
 ## 🌟 Features
